@@ -1,18 +1,12 @@
+# ===== Mini-OpenClaw 项目专属 =====
+
 # 虚拟环境
 .venv/
 venv/
 env/
-
-# Python 缓存
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-.Python
-
-# pytest 缓存
-.pytest_cache/
-*.egg-info/
+ENV/
+env.bak/
+venv.bak/
 
 # 数据文件（Excel / CSV，体积大，不提交）
 backend/data/*.xlsx
@@ -26,16 +20,93 @@ backend/sessions/archive/
 # 向量索引（可本地重建）
 backend/storage/
 
-# 环境变量
+# ===== Python =====
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+*.so
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Environments
 .env
 .env.local
+.envrc
 
-# IDE
+# pyenv / pdm / pixi
+.pdm-python
+.pdm-build/
+.pixi
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# mypy / pyre / pytype
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
+
+# Ruff
+.ruff_cache/
+
+# ===== IDE =====
+
 .vscode/
 *.code-workspace
+.cursorignore
+.cursorindexingignore
+.spyderproject
+.spyproject
+.ropeproject
 
-# macOS
+# ===== OS =====
+
 .DS_Store
-
-# Windows
 Thumbs.db
