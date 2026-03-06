@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+langchain-core
+langchain-ollama
+langchain-experimental
+langgraph
+requests
+pytest
+pandas
+openpyxl

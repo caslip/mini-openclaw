@@ -1,0 +1,2 @@
+- 编程语言：Python、TypeScript
+- 回答风格：严谨
