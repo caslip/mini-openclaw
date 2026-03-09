@@ -1,0 +1,60 @@
+/* Layout - two-column: sidebar ~25% + main */
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #202123;
+}
+
+.app-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar-container {
+  width: 260px;
+  min-width: 240px;
+  flex-shrink: 0;
+  background-color: #202123;
+  border-right: 1px solid #2f3034;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #202123;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.error-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #343541;
+  border: 1px solid #40414f;
+  color: #ececec;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  z-index: 1000;
+  max-width: 90%;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.error-toast:hover {
+  background-color: #40414f;
+}
+
+@media (max-width: 768px) {
+  .app-main { flex-direction: column; }
+  .sidebar-container { width: 100%; height: 200px; border-right: none; border-bottom: 1px solid #2f3034; }
+}
