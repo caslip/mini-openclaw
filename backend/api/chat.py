@@ -58,7 +58,7 @@ def chat(req: ChatRequest) -> StreamingResponse:
                 full_content = "".join(chunks).strip() or event.get("content", "")
                 agent_manager.session_manager.save_message(req.session_id, "user", req.message)
                 agent_manager.session_manager.save_message(req.session_id, "assistant", full_content)
-                yield _format_sse("done", {"content": full_content, "session_id": req.session_id})
+                yield _format_sse("done", {"type": "done", "content": full_content, "session_id": req.session_id})
 
             else:
                 yield _format_sse(etype, event)

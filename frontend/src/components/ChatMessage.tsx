@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Message } from '../types';
+import { ThinkingChain } from './ThinkingChain';
 import './ChatMessage.css';
 
 interface ChatMessageProps {
@@ -15,8 +16,17 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       <div className="message-avatar">
         {isUser ? '👤' : '🤖'}
       </div>
-      <div className="message-content">
-        <ReactMarkdown>{message.content}</ReactMarkdown>
+      <div className="message-body">
+        {/* Show thinking chain for assistant messages */}
+        {!isUser && (message.thinking || message.toolCalls?.length) && (
+          <ThinkingChain
+            thinking={message.thinking}
+            toolCalls={message.toolCalls}
+          />
+        )}
+        <div className="message-content">
+          <ReactMarkdown>{message.content}</ReactMarkdown>
+        </div>
       </div>
     </div>
   );

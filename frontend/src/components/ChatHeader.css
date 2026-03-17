@@ -7,6 +7,7 @@
   background-color: #202123;
   border-bottom: 1px solid #2f3034;
   flex-shrink: 0;
+  min-width: 0;
 }
 
 .chat-header-left {
@@ -41,6 +42,10 @@
 
 .chat-header-model-label {
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
 .chat-header-chevron {
@@ -85,4 +90,13 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .chat-header {
+    padding: 0.5rem 0.75rem;
+  }
+  .chat-header-model-label {
+    max-width: 120px;
+  }
 }

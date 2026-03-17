@@ -1,0 +1,10 @@
+market_id|MRKT_DSC_SHRT|hierarchy_level|hierarchy_number|hierarchy_name|hierarchy_column
+10004158|LEH o. Discounter||||
+1088697|Edeka EH Regionen||||
+10006175|Markant||||
+10003879|LEH||||
+10003689|Discounter insg.||||
+10003904|VM insg.||||
+1043584|Rewe VS Filialen+Partner||||
+1601418|REWE_DO_Census||||
+10004410|SM insg.||||

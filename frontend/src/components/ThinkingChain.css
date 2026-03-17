@@ -1,0 +1,152 @@
+.thinking-chain {
+  margin: 8px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  overflow: hidden;
+}
+
+.thinking-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f1f3f5;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.thinking-header:hover {
+  background: #e9ecef;
+}
+
+.thinking-toggle {
+  font-size: 10px;
+  color: #6c757d;
+}
+
+.thinking-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.thinking-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  background: #6c5ce7;
+  color: white;
+  border-radius: 10px;
+  margin-left: auto;
+}
+
+.tool-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  background: #20c997;
+  color: white;
+  border-radius: 10px;
+  margin-left: auto;
+}
+
+.thinking-content {
+  padding: 12px;
+}
+
+.thinking-reasoning {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.thinking-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.thinking-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #495057;
+  background: #fff;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.tool-call {
+  margin-top: 8px;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+  overflow: hidden;
+}
+
+.tool-call.pending {
+  border-left: 3px solid #ffc107;
+}
+
+.tool-call.completed {
+  border-left: 3px solid #28a745;
+}
+
+.tool-call-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tool-icon {
+  font-size: 14px;
+}
+
+.tool-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #212529;
+}
+
+.tool-status {
+  font-size: 11px;
+  color: #6c757d;
+  margin-left: auto;
+}
+
+.tool-args {
+  padding: 10px;
+  margin: 0;
+  font-family: "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #495057;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.tool-result {
+  padding: 10px;
+  margin: 0;
+  font-family: "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #28a745;
+  background: #f0fff4;
+  max-height: 150px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

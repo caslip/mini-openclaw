@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar";
 import ChatHeader from "./components/ChatHeader";
 import ChatPanel from "./components/ChatPanel";
 import ChatInput from "./components/ChatInput";
+import SettingsModal from "./components/SettingsModal";
 import "./App.css";
 
 function AppContent() {
@@ -16,12 +17,14 @@ function AppContent() {
     loadSessions,
     createSession,
     selectSession,
+    renameSession,
     deleteSession,
     sendMessage,
     clearError,
   } = useApp();
 
   const [retrievals, setRetrievals] = useState<Array<{id: string; content: string; source: string; score?: number}>>([]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
     loadSessions();
@@ -42,19 +45,11 @@ function AppContent() {
 
   const handleSendMessage = async (text: string) => {
     setRetrievals([]);
-    if (!currentSessionId) {
-      const newSessionId = await createSession();
-      if (newSessionId) {
-        await sendMessage(text);
-      }
-    } else {
-      await sendMessage(text);
-    }
+    await sendMessage(text);
   };
 
   const handleSettingsClick = () => {
-    // TODO: Implement settings modal
-    console.log("Settings clicked");
+    setSettingsOpen(true);
   };
 
   return (
@@ -66,6 +61,7 @@ function AppContent() {
             currentSessionId={currentSessionId}
             onSelect={handleSelectSession}
             onCreate={handleNewSession}
+            onRename={renameSession}
             onDelete={handleDeleteSession}
           />
         </aside>
@@ -86,6 +82,8 @@ function AppContent() {
           {error}
         </div>
       )}
+
+      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
   );
 }

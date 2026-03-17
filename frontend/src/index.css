@@ -58,6 +58,7 @@ input, textarea, select {
   border-radius: 8px;
   overflow-x: auto;
   margin: 0.5rem 0;
+  max-width: 100%;
 }
 
 .chat-panel code {

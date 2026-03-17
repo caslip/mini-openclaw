@@ -8,6 +8,7 @@ from .list_data_files_tool import make_list_data_files_tool
 from .python_repl_tool import make_python_repl_tool
 from .read_file_tool import make_read_file_tool
 from .search_knowledge_tool import make_search_knowledge_tool
+from .set_reminder_tool import make_set_reminder_tool
 from .terminal_tool import make_terminal_tool
 from .write_file_tool import make_write_file_tool
 
@@ -17,7 +18,7 @@ def get_all_tools(
     memory_indexer: Any = None,
     get_session_id=None,
 ) -> list:
-    return [
+    tools = [
         make_terminal_tool(base_dir),
         make_python_repl_tool(base_dir),
         make_fetch_url_tool(base_dir),
@@ -26,3 +27,7 @@ def get_all_tools(
         make_write_file_tool(base_dir, memory_indexer, get_session_id),
         make_list_data_files_tool(base_dir),
     ]
+    # 添加定时提醒工具
+    if get_session_id:
+        tools.append(make_set_reminder_tool(get_session_id))
+    return tools

@@ -1,0 +1,36 @@
+{
+  "type": "prompt",
+  "status": "completed",
+  "timestamp": 1773742118.749046,
+  "data": {
+    "sessions_analyzed": 9,
+    "patterns": [
+      {
+        "type": "common_topics",
+        "description": "最常见的用户话题",
+        "data": [
+          [
+            "日常对话",
+            7
+          ],
+          [
+            "其他",
+            2
+          ]
+        ]
+      },
+      {
+        "type": "avg_messages",
+        "description": "平均会话消息数",
+        "data": {
+          "value": 4.0
+        }
+      }
+    ],
+    "suggestions": [
+      "建议针对'日常对话'场景优化系统Prompt，增加相关示例和指导"
+    ]
+  },
+  "error": null,
+  "duration_ms": 5.536079406738281
+}

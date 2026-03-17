@@ -1,0 +1,43 @@
+{
+  "type": "skill",
+  "status": "completed",
+  "timestamp": 1773742118.743004,
+  "data": {
+    "discovered_skills": [
+      {
+        "name": "data_analysis",
+        "description": "数据分析与 Excel 处理工具集 - 用于分析 data/ 目录下的 Excel 数据文件",
+        "path": "skills\\data_analysis",
+        "location": "./skills/data_analysis/SKILL.md",
+        "content_hash": "b03f730ea87598608b1fc4284d42cd56",
+        "content_preview": "---\nname: data_analysis\ndescription: 数据分析与 Excel 处理工具集 - 用于分析 data/ 目录下的 Excel 数据文件\n---\n\n## 触发条件\n\n当用户请求以下类型时使用本技能：\n- 数据查询（\"2024 Q3 销售额是多少？\"、\"Q1-Q4 销售趋势\"）\n- 数据统计（\"每月平均订单量\"、\"最高销售额客户\"）\n- 多表关联（\"按客户查看销售\"、\"",
+        "is_new": false,
+        "last_modified": 1772914095.8208902
+      },
+      {
+        "name": "get_weather",
+        "description": "获取指定城市的实时天气信息（通过 fetch_url 调用 wttr.in API）",
+        "path": "skills\\get_weather",
+        "location": "./skills/get_weather/SKILL.md",
+        "content_hash": "0554051e8765cea0f9155652dfb8cc7e",
+        "content_preview": "---\nname: get_weather\ndescription: 获取指定城市的实时天气信息（通过 fetch_url 调用 wttr.in API）\n---\n\n## 步骤\n\n1. **构建请求 URL**\n   - 使用 `wttr.in/{城市名}` 格式（支持英文/拼音城市名，如 Beijing、Shanghai）\n   - 添加查询参数：`?q={city}&lang=zh`（如需中文",
+        "is_new": false,
+        "last_modified": 1773256378.6305459
+      },
+      {
+        "name": "reminder",
+        "description": "设置定时提醒，在指定时间后于当前对话中提醒用户",
+        "path": "skills\\reminder",
+        "location": "./skills/reminder/SKILL.md",
+        "content_hash": "8815f8d62785478f00753b2784c856db",
+        "content_preview": "---\nname: reminder\ndescription: 设置定时提醒，在指定时间后于当前对话中提醒用户\n---\n\n## 触发条件\n\n当用户表达以下意图时使用本技能：\n\n- \"X 分钟后/小时后提醒我\"\n- \"提醒我……\"\n- \"set a reminder in ...\"\n- \"remind me to ...\"\n- \"30秒/1分钟/5分钟后叫我\"\n\n## 步骤\n\n1. 从用户输入中解析",
+        "is_new": false,
+        "last_modified": 1773234876.171783
+      }
+    ],
+    "registered": true,
+    "total_count": 3
+  },
+  "error": null,
+  "duration_ms": 7.056474685668945
+}

@@ -69,6 +69,7 @@ class AgentManager:
         agent = create_react_agent(self.llm, self.tools)
 
         final_text = ""
+        last_reasoning = ""
 
         for event in agent.stream(
             {"messages": built_messages},
@@ -87,6 +88,13 @@ class AgentManager:
                         }
 
                     elif node_name == "agent":
+                        # Capture reasoning/thinking content from the model
+                        reasoning = getattr(msg, "reasoning_content", None)
+                        if reasoning and reasoning != last_reasoning:
+                            yield {"type": "thinking", "content": reasoning}
+                            last_reasoning = reasoning
+
+                        # Handle tool calls (pending)
                         tool_calls = getattr(msg, "tool_calls", [])
                         for tc in tool_calls:
                             yield {
@@ -95,11 +103,16 @@ class AgentManager:
                                 "args": tc.get("args", {}),
                             }
 
+                        # Handle text output
                         text_content = getattr(msg, "content", "")
                         if text_content and not tool_calls:
                             final_text = text_content
-                            for token in text_content.split():
-                                yield {"type": "token", "content": token + " "}
+                            # Stream token by token for smoother display
+                            for char in text_content:
+                                if char.strip():
+                                    yield {"type": "token", "content": char}
+                                else:
+                                    yield {"type": "token", "content": char}
 
         yield {
             "type": "done",

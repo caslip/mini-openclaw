@@ -89,6 +89,10 @@ graph TB
             TokensAPI[tokens.py - Count]
             CompressAPI[compress.py - Summarize]
             ConfigAPI[config_api.py - RAG Toggle]
+            HeartbeatAPI[heartbeat_api.py - Heartbeat]
+            CronAPI[cron_api.py - Cron Jobs]
+            ChannelsAPI[channels_api.py - Channels]
+            EvolutionAPI[evolution_api.py - Evolution]
         end
 
         subgraph graphEngine [Agent Engine - graph/]
@@ -104,6 +108,16 @@ graph TB
             FetchURL[fetch_url]
             ReadFile[read_file]
             SearchKB[search_knowledge_base]
+            WriteFile[write_file]
+            ListData[list_data_files]
+            SetReminder[set_reminder]
+        end
+
+        subgraph services [Services]
+            Heartbeat[heartbeat.py]
+            CronScheduler[cron_scheduler.py]
+            Evolution[evolution/]
+            Channels[channels/]
         end
     end
 
@@ -122,12 +136,21 @@ graph TB
     Browser -->|REST| TokensAPI
     Browser -->|REST| CompressAPI
     Browser -->|REST| ConfigAPI
+    Browser -->|REST| HeartbeatAPI
+    Browser -->|REST| CronAPI
+    Browser -->|REST| ChannelsAPI
+    Browser -->|REST| EvolutionAPI
 
     ChatAPI --> AgentMgr
     AgentMgr --> SessionMgr
     AgentMgr --> PromptBuilder
     AgentMgr --> MemIndexer
     AgentMgr --> tools
+
+    HeartbeatAPI --> Heartbeat
+    CronAPI --> CronScheduler
+    ChannelsAPI --> Channels
+    EvolutionAPI --> Evolution
 
     SessionMgr --> Sessions
     PromptBuilder --> Workspace
@@ -263,6 +286,7 @@ LLM 要求严格的 user/assistant 交替，而实际存储中可能有连续多
 | `search_knowledge_base` | `search_knowledge_tool.py` | 搜索知识库 | 从 `knowledge/` 目录关键词检索；top-3 匹配 |
 | `write_file` | `write_file_tool.py` | 写入项目内文件 | 路径白名单（`memory/`、`workspace/`、`skills/`、`knowledge/`）；路径遍历拦截；写入 `memory/MEMORY.md` 时自动记录 MD5 变更日志并触发索引重建 |
 | `list_data_files` | `list_data_files_tool.py` | 列举 `data/` 目录下的数据文件结构 | 只读扫描；返回文件名、大小、Sheet 列表、列名、行数；供数据分析前探知数据结构 |
+| `set_reminder` | `set_reminder_tool.py` | 设置定时提醒 | 路径白名单（memory/）；提醒写入 memory/logs/；触发 cron_scheduler 添加定时任务 |
 
 **`skills_scanner.py`** 非工具，是启动时执行的扫描器：遍历 `skills/*/SKILL.md`，解析 YAML frontmatter（`name`、`description`），生成 XML 格式的 `SKILLS_SNAPSHOT.md`。
 
@@ -293,6 +317,7 @@ LLM 要求严格的 user/assistant 交替，而实际存储中可能有连续多
 
 | 事件 | 数据 | 触发时机 |
 |------|------|----------|
+| `thinking` | `{content}` | LLM 推理/思考过程（reasoning_content） |
 | `retrieval` | `{query, results}` | RAG 模式检索完成后 |
 | `token` | `{content}` | LLM 输出每个 token |
 | `tool_start` | `{tool, args}` | Agent 决定调用工具时（工具执行前） |
@@ -347,6 +372,63 @@ LLM 要求严格的 user/assistant 交替，而实际存储中可能有连续多
 | `/api/config/rag-mode` | PUT | 切换 RAG 模式，body: `{enabled: bool}` |
 
 配置持久化到 `backend/config.json`。
+
+**`heartbeat_api.py` — 心跳监控**
+
+| 端点 | 方法 | 说明 |
+|------|------|------|
+| `/api/heartbeat/status` | GET | 获取心跳状态 |
+| `/api/heartbeat/trigger` | POST | 手动触发心跳 |
+| `/api/heartbeat/config` | POST | 配置心跳参数 |
+| `/api/heartbeat/metrics` | GET | 获取心跳指标 |
+
+**`cron_api.py` — 定时任务管理**
+
+| 端点 | 方法 | 说明 |
+|------|------|------|
+| `/api/cron/jobs` | GET | 列出所有定时任务 |
+| `/api/cron/jobs` | POST | 创建新定时任务 |
+| `/api/cron/jobs/{job_id}` | GET | 获取任务详情 |
+| `/api/cron/jobs/{job_id}` | PUT | 更新任务 |
+| `/api/cron/jobs/{job_id}` | DELETE | 删除任务 |
+| `/api/cron/jobs/{job_id}/trigger` | POST | 手动触发任务 |
+| `/api/cron/jobs/{job_id}/history` | GET | 获取任务执行历史 |
+| `/api/cron/templates` | GET | 获取任务模板列表 |
+| `/api/cron/templates/{template_id}` | GET | 获取模板详情 |
+| `/api/cron/jobs/from-template` | POST | 从模板创建任务 |
+| `/api/cron/status` | GET | 获取调度器状态 |
+| `/api/cron/export` | GET | 导出任务配置 |
+| `/api/cron/import` | POST | 导入任务配置 |
+| `/api/cron/metrics` | GET | 获取任务指标 |
+
+**`channels_api.py` — 多渠道通知**
+
+| 端点 | 方法 | 说明 |
+|------|------|------|
+| `/api/channels/status` | GET | 获取所有渠道状态 |
+| `/api/channels/test` | POST | 测试渠道连接 |
+| `/api/channels/send` | POST | 发送消息到渠道 |
+| `/api/channels/list` | GET | 列出可用渠道 |
+| `/api/channels/config/telegram` | POST | 配置 Telegram 渠道 |
+| `/api/channels/config/feishu` | POST | 配置飞书渠道 |
+
+**`evolution_api.py` — Agent 进化系统**
+
+| 端点 | 方法 | 说明 |
+|------|------|------|
+| `/api/evolution/skills/discover` | POST | 发现新技能 |
+| `/api/evolution/skills/summary` | GET | 获取技能摘要 |
+| `/api/evolution/prompt/analyze` | POST | 分析提示词 |
+| `/api/evolution/prompt/summary` | GET | 获取提示词摘要 |
+| `/api/evolution/workflow/analyze` | POST | 分析工作流 |
+| `/api/evolution/workflow/summary` | GET | 获取工作流摘要 |
+| `/api/evolution/workflow/executions` | GET | 获取工作流执行记录 |
+| `/api/evolution/auto` | POST | 触发自动进化 |
+| `/api/evolution/status` | GET | 获取进化系统状态 |
+| `/api/evolution/scheduler/start` | POST | 启动进化调度器 |
+| `/api/evolution/scheduler/stop` | POST | 停止进化调度器 |
+| `/api/evolution/scheduler/config` | GET | 获取调度器配置 |
+| `/api/evolution/scheduler/config` | POST | 配置调度器 |
 
 ---
 
@@ -666,8 +748,10 @@ sequenceDiagram
 | `ChatPanel` | `components/chat/ChatPanel.tsx` | 聊天面板（消息列表 + 输入框） |
 | `ChatMessage` | `components/chat/ChatMessage.tsx` | 消息气泡（Markdown 渲染） |
 | `ChatInput` | `components/chat/ChatInput.tsx` | 输入框 |
-| `ThoughtChain` | `components/chat/ThoughtChain.tsx` | 工具调用思维链（可折叠） |
+| `ThoughtChain` | `components/chat/ThoughtChain.tsx` | LLM 思维链展示（可折叠） |
 | `RetrievalCard` | `components/chat/RetrievalCard.tsx` | RAG 检索结果卡片 |
+| `SettingsModal` | `components/SettingsModal.tsx` | 设置弹窗 |
+| `RagToggle` | `components/RagToggle.tsx` | RAG 模式开关 |
 | `Navbar` | `components/layout/Navbar.tsx` | 顶部导航栏 |
 | `Sidebar` | `components/layout/Sidebar.tsx` | 左侧边栏（会话列表 + Raw Messages） |
 | `ResizeHandle` | `components/layout/ResizeHandle.tsx` | 面板拖拽分隔条 |
@@ -730,7 +814,11 @@ mini-OpenClaw/
 │   │   ├── files.py                  # 文件读写 + 技能列表
 │   │   ├── tokens.py                 # Token 统计
 │   │   ├── compress.py               # 对话压缩
-│   │   └── config_api.py             # RAG 模式开关
+│   │   ├── config_api.py             # RAG 模式开关
+│   │   ├── heartbeat_api.py          # 心跳监控
+│   │   ├── cron_api.py               # 定时任务管理
+│   │   ├── channels_api.py           # 多渠道通知
+│   │   └── evolution_api.py          # Agent 进化系统
 │   │
 │   ├── graph/                        # Agent 核心逻辑
 │   │   ├── agent.py                  # AgentManager — 构建 & 流式调用
@@ -738,7 +826,7 @@ mini-OpenClaw/
 │   │   ├── prompt_builder.py         # System Prompt 组装器
 │   │   └── memory_indexer.py         # MEMORY.md 向量索引（RAG）
 │   │
-│   ├── tools/                        # 7 个核心工具（@tool 装饰器格式）
+│   ├── tools/                        # 8 个核心工具（@tool 装饰器格式）
 │   │   ├── __init__.py               # 工具注册工厂 get_all_tools()
 │   │   ├── terminal_tool.py          # 沙箱终端
 │   │   ├── python_repl_tool.py       # Python 解释器（PythonAstREPLTool）
@@ -747,7 +835,27 @@ mini-OpenClaw/
 │   │   ├── search_knowledge_tool.py  # 知识库搜索
 │   │   ├── write_file_tool.py        # 白名单文件写入 + MEMORY.md 变更日志
 │   │   ├── list_data_files_tool.py   # 数据文件结构探查（Sheet / 列名 / 行数）
-│   │   └── skills_scanner.py         # 技能目录扫描器
+│   │   ├── set_reminder_tool.py      # 定时提醒设置
+│   │   └── skills_scanner.py        # 技能目录扫描器
+│   │
+│   ├── heartbeat.py                  # Agent 心跳和诊断机制
+│   ├── cron_scheduler.py             # 定时任务调度器
+│   │
+│   ├── evolution/                    # Agent 自动进化引擎
+│   │   ├── evolution_engine.py
+│   │   ├── skill_discovery.py
+│   │   ├── prompt_evolution.py
+│   │   └── workflow_evolution.py
+│   │
+│   ├── evolution_data/               # 进化数据存储
+│   │   ├── known_skills.json
+│   │   ├── last_skill.json
+│   │   ├── last_prompt.json
+│   │   └── last_workflow.json
+│   │
+│   ├── channels/                     # 多渠道消息发送
+│   │   ├── telegram_handler.py
+│   │   └── feishu_handler.py
 │   │
 │   ├── workspace/                    # System Prompt 组件
 │   │   ├── SOUL.md                   # 人格、语气、边界
@@ -756,8 +864,9 @@ mini-OpenClaw/
 │   │   └── AGENTS.md                 # 操作指南 & 记忆/技能协议
 │   │
 │   ├── skills/                       # 技能目录（每个技能一个子目录）
-│   │   ├── get_weather/SKILL.md      # 示例：天气查询技能
-│   │   └── data_analysis/SKILL.md   # 数据分析技能（pandas + Excel/CSV）
+│   │   ├── get_weather/SKILL.md      # 天气查询技能
+│   │   ├── data_analysis/SKILL.md    # 数据分析技能（pandas + Excel/CSV）
+│   │   └── reminder/SKILL.md         # 提醒设置技能
 │   │
 │   ├── data/                         # 数据文件目录（Excel / CSV，不提交 Git）
 │   │   └── .gitkeep                  # 占位文件，保证目录被 Git 追踪

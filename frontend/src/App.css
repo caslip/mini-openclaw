@@ -1,6 +1,8 @@
-/* Layout - two-column: sidebar ~25% + main */
+/* Layout - two-column: sidebar fixed + main fluid, responsive */
 .app-container {
   height: 100vh;
+  width: 100%;
+  min-width: 320px;
   display: flex;
   flex-direction: column;
   background-color: #202123;
@@ -9,12 +11,14 @@
 .app-main {
   display: flex;
   flex: 1;
+  min-height: 0;
   overflow: hidden;
+  width: 100%;
 }
 
 .sidebar-container {
   width: 260px;
-  min-width: 240px;
+  min-width: 260px;
   flex-shrink: 0;
   background-color: #202123;
   border-right: 1px solid #2f3034;
@@ -25,11 +29,11 @@
 
 .chat-container {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   background-color: #202123;
   overflow: hidden;
-  min-width: 0;
 }
 
 .error-toast {
@@ -54,7 +58,38 @@
   background-color: #40414f;
 }
 
+/* Tablet: slightly narrower sidebar to keep chat area usable */
+@media (max-width: 1024px) {
+  .sidebar-container {
+    width: 240px;
+    min-width: 240px;
+  }
+}
+
+/* Mobile: stack sidebar above chat, fixed height sidebar */
 @media (max-width: 768px) {
-  .app-main { flex-direction: column; }
-  .sidebar-container { width: 100%; height: 200px; border-right: none; border-bottom: 1px solid #2f3034; }
+  .app-main {
+    flex-direction: column;
+  }
+  .sidebar-container {
+    width: 100%;
+    min-width: 100%;
+    height: 180px;
+    min-height: 180px;
+    flex-shrink: 0;
+    border-right: none;
+    border-bottom: 1px solid #2f3034;
+  }
+  .chat-container {
+    min-height: 0;
+    flex: 1;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .sidebar-container {
+    height: 160px;
+    min-height: 160px;
+  }
 }

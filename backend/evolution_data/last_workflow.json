@@ -1,0 +1,13 @@
+{
+  "type": "workflow",
+  "status": "completed",
+  "timestamp": 1773742118.750048,
+  "data": {
+    "patterns": [],
+    "suggestions": [
+      "暂无工作流数据，建议积累更多执行记录后再进行分析"
+    ]
+  },
+  "error": null,
+  "duration_ms": 0.0
+}

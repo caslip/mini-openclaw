@@ -1,0 +1,14 @@
+{
+  "skills\\data_analysis": {
+    "name": "data_analysis",
+    "hash": "b03f730ea87598608b1fc4284d42cd56"
+  },
+  "skills\\get_weather": {
+    "name": "get_weather",
+    "hash": "bba5cd24a6698917ee50d0e8ec3bcd94"
+  },
+  "skills\\reminder": {
+    "name": "reminder",
+    "hash": "8815f8d62785478f00753b2784c856db"
+  }
+}

@@ -125,6 +125,10 @@ export function streamChat(
           }
         }
       }
+      // 流正常结束时发送 done，确保 isLoading 被重置、输入框恢复可输入
+      if (!aborted) {
+        onEvent({ type: "done" });
+      }
     } catch (err) {
       if (err instanceof Error && err.name !== "AbortError") {
         onEvent({ type: "error", error: err.message });
